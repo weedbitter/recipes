@@ -10,7 +10,7 @@
 <p>Shell脚本语法</p>
 
 <ul>
-<li><a href="http://learn.akae.cn/media/ch31s05.html">http://www.java2s.com/Code/Perl/CatalogPerl.htm</a></li>
+<li><a href="http://learn.akae.cn/media/ch31s05.html">http://learn.akae.cn/media/ch31s05.html</a></li>
 </ul>
 
 
