@@ -2,8 +2,130 @@
 而大多数的linux播放器默认以utf-8编码读取，这就产生了乱码
 
 
-这里我用到了三个工具，convmv, iconv, python-mutagen.分别处理上述三个问题，下面一一介绍：<br><br>&nbsp;&nbsp;&nbsp; convmv 实现文件名字的转换：<br>&nbsp;&nbsp;&nbsp; sudo apt-get install convmv<br>&nbsp;&nbsp;&nbsp; convmv -f code1 -t code2 -r<br><br>&nbsp;&nbsp;&nbsp; code1：目录原来使用的字符集编码。支持gb2312, gbk, big5，不支持gb18030和big5-hkscs<br>&nbsp;&nbsp;&nbsp; code2：预转换到的字符集编码。对于ubuntu，这里填写utf8<br><br>&nbsp;&nbsp;&nbsp; -r 参数：转换子目录<br>&nbsp;&nbsp;&nbsp; -f : from<br>&nbsp;&nbsp;&nbsp; -t : to<br>&nbsp;&nbsp;&nbsp; dir：要转换的目录<br><br>&nbsp;&nbsp;&nbsp; man convmv查看帮助文件，这个非常有用，学会看Linux的帮助文档对于Linux和英语的学习都有很大益处，强烈建议大家多使用man命令:)<br><br>&nbsp;&nbsp;&nbsp; iconv实现文件内容的转换：<br><br>&nbsp;&nbsp;&nbsp; iconv -f code1 -t code2 oldfile &gt; newfile<br><br>&nbsp;&nbsp;&nbsp; 其他命令和参数请大家使用man进行查阅，并不是我懒，我是不想让大家变懒，不管怎样，我们都应该自己去体会这个过程，这样才能把它真正学会。<br><br>&nbsp;&nbsp;&nbsp; python-mutagen---mp3 ID3 tags设置工具<br>&nbsp;&nbsp;&nbsp; Mutagen 是一个用来处理声音相关数据的 Python<br>&nbsp;&nbsp;&nbsp; 模块.它支持 ID3(所有版本),APEv2,Ogg Vorbis,FLAC和Ogg<br>&nbsp;&nbsp;&nbsp; FLAC读取,以及ID3v1.1,ID3v2.4,APEv2,Ogg Vorbis,FLAC还有Ogg<br>&nbsp;&nbsp;&nbsp; FLAC信息写入.也可以用来读取MPEG音频和Xing标题.FLAC流信息块,以及Ogg vorbis,Ogg<br>&nbsp;&nbsp;&nbsp; FLAG流标题.最后,它包含一个处理Ogg 流的模块.<br>&nbsp;&nbsp;&nbsp; mid3v2 -a artist -A album -t title -c comment -g genre mp3file<br>&nbsp;&nbsp;&nbsp; 设置mp3file的ID3 tags<br>&nbsp;&nbsp;&nbsp; find . -iname "*.mp3" -execdir mid3iconv -e GBK {} \;<br>&nbsp;&nbsp;&nbsp;&nbsp; <br>&nbsp;&nbsp;&nbsp; 这会转换当前目录其子目录中的 mp3 文件标签编码为正确的 utf8,-execdir意思是对查到的每个文件执行后面的shell脚本，脚本中-e GBK意思是文件原来使用的字符集编码，读者还可以man find一下，看看-iname和-name的区别，呵呵，总是喜欢给你们卖关子:)<br>&nbsp;&nbsp;&nbsp; PDF乱码问题解决：<br>&nbsp;&nbsp;&nbsp; 第一步，安装中文语言支持包：<br>&nbsp;&nbsp;&nbsp; sudo apt-get install xpdf-chinese-simplified xpdf-chinese-traditional<br>&nbsp;&nbsp;&nbsp; 安装完后打开pdf文档，如果发现仍然是乱码，进行第二步，安装安装poppler-data：从8.04开始，源中开始提供poppler-data安装包的支持，可以直接输入命令 <br>&nbsp;&nbsp;&nbsp; sudo apt-get install poppler-data<br>&nbsp;&nbsp;&nbsp; 或者去官方下载tar.gz压缩包自己安装，网址是 <br>&nbsp;&nbsp;&nbsp; http://poppler.freedesktop.org/<br>&nbsp;&nbsp;&nbsp; ，自己编译安装，在此不在熬述<br>&nbsp;&nbsp;&nbsp; 若第一，二步完成后，打开pdf文档中文乱码都变成方块的话，就进行第三步，删除字体<br>&nbsp;&nbsp;&nbsp; sudo rm /etc/fonts/conf.d/49-sansserif.conf<br>&nbsp;&nbsp;&nbsp; 好了，到这里，相信大家可以开心的使用Linux了，我是很开心啦，一次性解决了乱码问题是一方面，另一方面，今天我的blog被Google收录了，呵呵，这就意味这我的这些笔记可以给更多的人提供参考了，同样我的笔记也借鉴了很多人的笔记，正所谓取之于民，用之于民也 :)</p>
-<p>只需要把mp3标签里面用gbk、gb18030、big5等编码存储的中文内容修改为Unicode编码，那么基本上所有Linux下的播放器都能正常识别mp3标签了。<br>关于mp3编码的转换，介绍一个工具----Mutagen，假如你安装了Quod Libet，那么这个包已经安装上去了。如果没有，执行下列命令就可以了。&nbsp; </p>
-<p>sudo apt-get install python-mutagen&nbsp; </p>
-<p>工具的使用方法&nbsp; </p>
-<p>#转换mp3文件所在的目录下，执行：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; mid3iconv -e gbk *.mp3&nbsp;&nbsp; <br>#转换当前目录下所有mp3文件(包括子目录)执行：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; find . -iname "*.mp3" -execdir mid3iconv -e gbk {}; <br>如果觉得每次都要输入命令很麻烦，也可以建立个shell脚本来批量转换：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 新建文件，写入：</p>
+这里我用到了三个工具，convmv, iconv, python-mutagen.分别处理上述三个问题，下面一一介绍：
+ convmv 实现文件名字的转换：
+ 
+       sudo apt-get install convmv
+       convmv -f code1 -t code2 -r
+ 
+ code1：目录原来使用的字符集编码。支持gb2312, gbk, big5，不支持gb18030和big5-hkscs
+ code2：预转换到的字符集编码。对于ubuntu，这里填写utf8
+ -r 参数：转换子目录
+ -f : from
+ -t : to
+ dir：要转换的目录
+ man convmv查看帮助文件，这个非常有用，学会看Linux的帮助文档对于Linux和英语的学习都有很大益处，强烈建议大家多使用man命令:)
+ iconv实现文件内容的转换：
+ iconv -f code1 -t code2 oldfile > newfile
+ 其他命令和参数请大家使用man进行查阅，并不是我懒，我是不想让大家变懒，不管怎样，我们都应该自己去体会这个过程，这样才能把它真正学会。
+ python-mutagen---mp3 ID3 tags设置工具
+ Mutagen 是一个用来处理声音相关数据的 Python 模块.它支持 ID3(所有版本),APEv2,Ogg Vorbis,FLAC和Ogg
+ 
+ FLAC读取,以及ID3v1.1,ID3v2.4,APEv2,Ogg Vorbis,FLAC还有Ogg
+ FLAC信息写入.也可以用来读取MPEG音频和Xing标题.FLAC流信息块,以及Ogg vorbis,Ogg
+ FLAG流标题.最后,它包含一个处理Ogg 流的模块.
+ mid3v2 -a artist -A album -t title -c comment -g genre mp3file
+ 设置mp3file的ID3 tags<br>&nbsp;&nbsp;&nbsp; find . -iname "*.mp3" -execdir mid3iconv -e GBK {} \;
+ 
+ 这会转换当前目录其子目录中的 mp3 文件标签编码为正确的 utf8,-execdir意思是对查到的每个文件执行后面的shell脚本，
+ 脚本中-e GBK意思是文件原来使用的字符集编码，读者还可以man find一下，看看-iname和-name的区别，呵呵，总是喜欢给你们卖关子:)
+ 
+ PDF乱码问题解决：
+ 
+ 第一步，安装中文语言支持包：
+ 
+ 
+       sudo apt-get install xpdf
+ 
+ 
+ 安装完后打开pdf文档，如果发现仍然是乱码，进行第二步， 安装安装poppler-data：
+ 从8.04开始，源中开始提供poppler-data安装包的支持，可以直接输入命令 
+ 
+ sudo apt-get install poppler-data
+ 
+ 或者去官方下载tar.gz压缩包自己安装，网址是 
+ http://poppler.freedesktop.org/ ，自己编译安装，在此不在熬述
+ 若第一，二步完成后，打开pdf文档中文乱码都变成方块的话，就进行第三步，删除字体
+ 
+       sudo rm /etc/fonts/conf.d/49-sansserif.conf
+ 
+ 好了，到这里，相信大家可以开心的使用Linux了，我是很开心啦，一次性解决了乱码问题是一方面，
+ 另一方面，今天我的blog被Google收录了，呵呵，这就意味这我的这些笔记可以给更多的人提供参考了，
+ 同样我的笔记也借鉴了很多人的笔记，正所谓取之于民，用之于民也 :)
+ 只需要把mp3标签里面用gbk、gb18030、big5等编码存储的中文内容修改为Unicode编码，
+ 那么基本上所有Linux下的播放器都能正常识别mp3标签了。
+ 
+ 
+ 关于mp3编码的转换，介绍一个工具----Mutagen，假如你安装了Quod Libet，那么这个包已经安装上去了。如果没有，执行下列命令就可以了。
+ 
+       sudo apt-get install python-mutagen&nbsp; 
+
+
+ 工具的使用方法 
+ #转换mp3文件所在的目录下，执行：
+  
+        mid3iconv -e gbk *.mp3
+        
+ #转换当前目录下所有mp3文件(包括子目录)执行：
+ 
+        find . -iname "*.mp3" -execdir mid3iconv -e gbk {};
+        
+ 如果觉得每次都要输入命令很麻烦，也可以建立个shell脚本来批量转换：
+ 新建文件，写入：
+ 
+        #!/bin/sh<br>
+        IFS=""<br>          
+        find . -iname "*.mp3" -execdir mid3iconv -e gbk {}; 
+ 
+ 然后把文件保存，拷贝到想要转换的目录下，执行就可以了(执行脚本的命令为 #sh filename)。
+ 因为现在在网上下载的mp3绝大多数采用的都是gbk/gb18030编码，-e gbk<br>参数是代表把gbk编码的标签转换为Unicode编码，
+ 假如mp3标签本身是Unicode编码的就不转换。如果需要转换其他编码的文件可以自行修改<br>gbk参数，比如改为gb18030、big5。
+ 转换后为的mp3标签类型为ID3v2 2.4，编码格式为UTF-16。 
+ 到了这一步之后，在Linux下使用所有播放器估计都没有什么问题了。
+ 下面我们回过头来看看，追溯一下根源，为什么这些mp3原来在Windows下用Media Player怎么都是显示正常的呢？
+ 难道是Linux不如Windows吗？其实这个道理很简单，Firefox同样也打不开很多IE轻松就能打开的页面，能说明Firefox不如IE吗？
+ 知情的人一看就明白了。Windows为了它所谓的兼容性，完全无视规范，自定规则，貌似它的软件兼容性很好，其实到头来，毁的还是用户，
+ 从众多的不符合W3C规范的网页和现在铺天盖地的mp3标签
+ 
+ 再转一个更牛的
+ 转换文件名由GBK为UTF8
+ 
+         sudo apt-get install convmv
+         convmv -r -f cpArray36 -t utf8 ?notest ?nosmart *
+ 
+ 批量转换src目录下的所有文件内容由GBK到UTF8
+
+         find src -type d -exec mkdir -p utf8/{} ;
+         find src -type f -exec iconv -f GBK -t UTF-8 {} -o utf8/{} ;
+         mv utf8/* src
+         rm -fr utf8
+         
+ 转换文件内容由GBK到UTF8
+ 
+        iconv -f gbk -t utf8 $i > newfile
+        
+ 转换 mp3 标签编码
+ 
+        sudo apt-get install python-mutagen
+        find . -iname "*.mp3" -execdir mid3iconv -e GBK {} ;
+        
+ 
+ 
+ Linux下MP3名字乱码
+ 
+ 解决方法：安装python-mutagen 
+ 安装方法(root权限，你懂得） 
+ fedora等红帽的： 
+ 
+         yum install python-mutagen 
+         
+ ubuntu等debian的： 
+         
+         apt-get install python-mutagen 
+         
+ 安完后 
+         
+         mid3iconv -e gbk *.mp3 
+ 
+ 
+ OK～ 
