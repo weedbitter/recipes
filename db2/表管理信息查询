@@ -1,0 +1,12 @@
+
+查询数据库管理字段：
+
+db2 "describe table syscat.tables"
+
+（表信息描述）
+
+
+db2 "select TABNAME from syscat.tables where TABLEID = '184' and TABSCHEMA = 'DB2INST'"
+
+
+(表id是184的表名)
